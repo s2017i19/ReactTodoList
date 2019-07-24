@@ -39,12 +39,32 @@ class App extends Component {
     }
   }
 
+  handleToggle = (id) => {
+    const { todos } = this.state;
+
+    const index = todos.findIndex(todo => todo.id === id); // id를 통해 몇 번째 아이템인지 찾음
+    const selected = todos[index];
+
+    const nextTodos = [...todos]; // 배열 복사
+
+    // 기존 값 복사, checked 값 덮어쓰기
+    nextTodos[index] = { 
+      ...selected, 
+      checked: !selected.checked
+    };
+
+    this.setState({
+      todos: nextTodos
+    });
+  }
+
   render() {
     const { input, todos } = this.state;
     const {
       handleChange,
       handleCreate,
-      handleKeyPress
+      handleKeyPress,
+      handleToggle
     } = this;
 
     return (
@@ -56,7 +76,7 @@ class App extends Component {
           onCreate={ handleCreate }
         />
       )}>
-        <TodoItemList todos={ todos }/>
+        <TodoItemList todos={ todos } onToggle={ handleToggle }/>
       </TodoListTemplate>
     );
   }
